@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Input } from '../../common/fields';
-import { Button } from '../../common/buttons';
+import { useNavigate } from 'react-router-dom';
+
+import { Input, PasswordInput } from '@common/fields';
+import { Button } from '@common/buttons';
 
 import styles from './LoginPage.module.css';
 
@@ -34,7 +36,9 @@ interface FormErrors {
   password: string | null;
 }
 
-const LoginPage = () => {
+export const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     username: '',
     password: '',
@@ -67,10 +71,9 @@ const LoginPage = () => {
             />
           </div>
           <div className={styles.input_container}>
-            <Input
+            <PasswordInput
               value={formValues.password}
               placeholder="password"
-              type="password"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
@@ -89,10 +92,13 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <div className={styles.sign_up_container}>Create new account</div>
+        <div
+          className={styles.sign_up_container}
+          onClick={() => navigate('/registration')}
+        >
+          Create new account
+        </div>
       </div>
     </div>
   );
 };
-
-export default LoginPage;
