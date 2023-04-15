@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Input, PasswordInput } from '@common/fields';
+import { Input, PasswordInput, CheckBox } from '@common/fields';
 import { Button } from '@common/buttons';
 
 import styles from './LoginPage.module.css';
@@ -42,6 +42,7 @@ export const LoginPage = () => {
   const [formValues, setFormValues] = useState({
     username: '',
     password: '',
+    notMyDevice: false,
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({
     username: null,
@@ -56,7 +57,7 @@ export const LoginPage = () => {
           <div className={styles.input_container}>
             <Input
               value={formValues.username}
-              placeholder="username"
+              label="username"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const username = event.target.value;
                 setFormValues({ ...formValues, username });
@@ -73,7 +74,7 @@ export const LoginPage = () => {
           <div className={styles.input_container}>
             <PasswordInput
               value={formValues.password}
-              placeholder="password"
+              label="password"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
@@ -87,8 +88,18 @@ export const LoginPage = () => {
               })}
             />
           </div>
+          <div className={styles.input_container}>
+            <CheckBox
+              checked={formValues.notMyDevice}
+              label="This is not my device"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const notMyDevice = event.target.checked;
+                setFormValues({ ...formValues, notMyDevice });
+              }}
+            />
+          </div>
           <div>
-            <Button>Sign In</Button>
+            <Button isLoading>Sign In</Button>
           </div>
         </div>
 

@@ -17,6 +17,6 @@
     "jsx": "react-jsx",
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src", "index.d.ts"],
+  "include": ["src/*", "**/*.d.ts"],
   "extends": "./tsconfig.paths.json"
 }

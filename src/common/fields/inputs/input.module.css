@@ -1,0 +1,50 @@
+.input {
+  border: none;
+  width: 100%;
+  font-size: 12px;
+  color: #000;
+  background-color: transparent;
+}
+
+.input:active,
+.input:focus {
+  outline: none;
+}
+
+.input_container {
+  height: 48px;
+  position: relative;
+  background-color: rgba(237, 237, 237, 0.7);
+  border-radius: 5px;
+  width: 100%;
+  padding: 20px 15px 10px;
+  cursor: text;
+}
+
+.input_container:hover {
+  background-color: #ededed;
+}
+
+.input_label {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  text-transform: capitalize;
+  transition: transform 150ms ease-out, font-size 150ms ease-out;
+}
+
+.focused .input_label {
+  transform: translate(-10%, -80%);
+  font-size: 10px;
+}
+
+.helper_text {
+  font-weight: 300;
+  font-size: 10px;
+  color: #db3939;
+  line-height: 14px;
+  padding-left: 10px;
+}
