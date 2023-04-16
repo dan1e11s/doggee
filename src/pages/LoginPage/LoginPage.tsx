@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Input, PasswordInput, CheckBox } from '@common/fields';
 import { Button } from '@common/buttons';
+import { IntlText } from '@features';
+
+import { useSignInEmailAndPassword } from '../../auth/useSignInEmailAndPassword';
+import { auth } from '../../auth/firebase/firebaseSetup';
 
 import styles from './LoginPage.module.css';
 
@@ -11,7 +15,7 @@ const validateIsEmpty = (value: string) => {
   return null;
 };
 
-const validateUsername = (value: string) => {
+const validateEmail = (value: string) => {
   return validateIsEmpty(value);
 };
 
@@ -20,11 +24,11 @@ const validatePassword = (value: string) => {
 };
 
 const loginFormValueSchema = {
-  username: validateUsername,
+  email: validateEmail,
   password: validatePassword,
 };
 
-const validateLloginForm = (
+const validateLoginForm = (
   name: keyof typeof loginFormValueSchema,
   value: string
 ) => {
@@ -32,42 +36,58 @@ const validateLloginForm = (
 };
 
 interface FormErrors {
-  username: string | null;
+  email: string | null;
   password: string | null;
+  message: string | null;
 }
 
 export const LoginPage = () => {
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
-    username: '',
+    email: '',
     password: '',
     notMyDevice: false,
   });
   const [formErrors, setFormErrors] = useState<FormErrors>({
-    username: null,
+    email: null,
     password: null,
+    message: null,
   });
+
+  const [signInWithEmailAndPassword, loggedInUser, isLoading, error] =
+    useSignInEmailAndPassword(auth);
+
+  useEffect(() => {
+    if (loggedInUser) {
+      navigate('/home');
+    }
+  }, [navigate, loggedInUser]);
+
+  const onSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    signInWithEmailAndPassword(formValues);
+  };
 
   return (
     <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.header_container}>DOGGEE</div>
-        <div className={styles.form_container}>
+        <form className={styles.form_container} onSubmit={onSubmit}>
           <div className={styles.input_container}>
             <Input
-              value={formValues.username}
-              label="username"
+              value={formValues.email}
+              label="email"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const username = event.target.value;
-                setFormValues({ ...formValues, username });
+                const email = event.target.value;
+                setFormValues({ ...formValues, email });
 
-                const error = validateLloginForm('username', username);
-                setFormErrors({ ...formErrors, username: error });
+                const error = validateLoginForm('email', email);
+                setFormErrors({ ...formErrors, email: error });
               }}
-              {...(!!formErrors.username && {
-                isError: !!formErrors.username,
-                helperText: formErrors.username,
+              {...(!!formErrors.email && {
+                isError: !!formErrors.email,
+                helperText: formErrors.email,
               })}
             />
           </div>
@@ -79,7 +99,7 @@ export const LoginPage = () => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
 
-                const error = validateLloginForm('password', password);
+                const error = validateLoginForm('password', password);
                 setFormErrors({ ...formErrors, password: error });
               }}
               {...(!!formErrors.password && {
@@ -99,15 +119,17 @@ export const LoginPage = () => {
             />
           </div>
           <div>
-            <Button isLoading>Sign In</Button>
+            <Button isLoading={isLoading} type="submit">
+              <IntlText path="button.signIn" />
+            </Button>
           </div>
-        </div>
+        </form>
 
         <div
           className={styles.sign_up_container}
           onClick={() => navigate('/registration')}
         >
-          Create new account
+          <IntlText path="page.login.CreateNewAccount" />
         </div>
       </div>
     </div>

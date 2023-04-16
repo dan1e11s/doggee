@@ -23,14 +23,14 @@
   display: inline-flex;
   width: 15px;
   height: 15px;
-  border: 2px solid rgba(245, 198, 120, 0.7);
+  border: 2px solid var(--color-accent7);
   background: transparent;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .custom_checkbox:hover {
-  border: 2px solid rgba(245, 198, 120, 1);
+  border: 2px solid var(--color-accent);
 }
 
 .label {
